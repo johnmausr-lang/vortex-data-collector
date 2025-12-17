@@ -3,32 +3,31 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 255, 255, 255;
-  --background-start-rgb: 2, 6, 23;
-  --background-end-rgb: 0, 0, 0;
+  --background: 222 47% 4%;
+  --foreground: 213 31% 91%;
+  --card: 222 47% 6%;
+  --primary: 217 91% 60%;
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  background-image: 
+    radial-gradient(at 0% 0%, hsla(217, 91%, 60%, 0.07) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, hsla(217, 91%, 60%, 0.05) 0px, transparent 50%);
+  min-height: 100vh;
 }
 
-/* Кастомный скроллбар для эстетики 2025 */
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: #020617;
-}
-::-webkit-scrollbar-thumb {
-  background: #1e293b;
-  border-radius: 10px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+@layer components {
+  .glass-card {
+    @apply bg-slate-900/40 backdrop-blur-xl border border-white/5 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)];
+  }
+  
+  .premium-button {
+    @apply relative overflow-hidden bg-blue-600 hover:bg-blue-500 text-white transition-all duration-300 shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_30px_rgba(37,99,235,0.5)] active:scale-95;
+  }
+
+  .input-field {
+    @apply bg-slate-950/50 border border-slate-800 rounded-2xl focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/10 transition-all outline-none;
+  }
 }
