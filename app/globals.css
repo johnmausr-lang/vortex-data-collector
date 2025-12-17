@@ -3,31 +3,46 @@
 @tailwind utilities;
 
 :root {
-  --background: 222 47% 4%;
-  --foreground: 213 31% 91%;
-  --card: 222 47% 6%;
-  --primary: 217 91% 60%;
+  --background: #020617;
+  --card: rgba(15, 23, 42, 0.6);
+  --primary: #2563eb;
+  --accent: #06b6d4;
+  --success: #10b981;
+  --error: #ef4444;
 }
 
-body {
-  background-color: hsl(var(--background));
-  color: hsl(var(--foreground));
-  background-image: 
-    radial-gradient(at 0% 0%, hsla(217, 91%, 60%, 0.07) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, hsla(217, 91%, 60%, 0.05) 0px, transparent 50%);
-  min-height: 100vh;
+@layer base {
+  body {
+    @apply bg-[#020617] text-slate-100 antialiased selection:bg-blue-500/30;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
 }
 
 @layer components {
+  /* Glassmorphism Component */
   .glass-card {
-    @apply bg-slate-900/40 backdrop-blur-xl border border-white/5 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)];
-  }
-  
-  .premium-button {
-    @apply relative overflow-hidden bg-blue-600 hover:bg-blue-500 text-white transition-all duration-300 shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_30px_rgba(37,99,235,0.5)] active:scale-95;
+    @apply backdrop-blur-2xl border border-white/5 shadow-2xl transition-all duration-300;
+    background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 100%);
   }
 
-  .input-field {
-    @apply bg-slate-950/50 border border-slate-800 rounded-2xl focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/10 transition-all outline-none;
+  /* Premium Button with Motion */
+  .premium-button {
+    @apply flex items-center justify-center gap-2 px-8 py-5 rounded-[2rem] font-bold text-lg
+           transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:pointer-events-none;
+  }
+
+  /* Question Card Animation */
+  .question-enter {
+    animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Custom Touch Targets */
+  .touch-target {
+    @apply min-h-[56px] min-w-[56px] flex items-center cursor-pointer;
   }
 }
