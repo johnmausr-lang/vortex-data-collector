@@ -1,12 +1,22 @@
 {
-  "name": "Vortex Data Collector 2025",
+  "name": "Vortex Collector 2025",
   "short_name": "Vortex2025",
+  "description": "Система сбора данных Сургутского района",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#020617",
   "theme_color": "#2563eb",
   "icons": [
-    { "src": "/icon-192.png", "type": "image/png", "sizes": "192x192" },
-    { "src": "/icon-512.png", "type": "image/png", "sizes": "512x512" }
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
   ]
 }
