@@ -1,64 +1,90 @@
 "use client";
 import Link from "next/link";
-import { ClipboardList, Settings, Wifi, Database, ArrowRight } from "lucide-react";
+import { ClipboardList, Settings, Database, Activity, ArrowRight } from "lucide-react";
 
-export default function Dashboard() {
+export default function Home() {
   return (
-    <div className="flex flex-col gap-6 animate-enter pt-10">
+    <div className="space-y-12 animate-fade-in">
       
-      {/* Заголовок */}
-      <div className="space-y-2 mb-4">
-        <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight">
-          Vortex <span className="text-blue-500">Collector</span>
+      {/* Приветствие */}
+      <div className="text-center py-10 space-y-4">
+        <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-500">
+          Vortex Collector
         </h1>
-        <p className="text-slate-400">Система полевых исследований v2.0</p>
+        <p className="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto">
+          Автономная система сбора полевых данных. Версия 2.0
+        </p>
       </div>
 
-      {/* Статус системы */}
-      <div className="grid grid-cols-2 gap-4">
-        <div className="glass-card p-4 rounded-2xl">
-          <div className="flex items-center gap-2 text-emerald-400 text-xs font-bold uppercase mb-1">
-            <Wifi size={14} /> Online
-          </div>
-          <div className="text-lg font-bold text-white">Связь есть</div>
-        </div>
-        <div className="glass-card p-4 rounded-2xl">
-          <div className="flex items-center gap-2 text-blue-400 text-xs font-bold uppercase mb-1">
-            <Database size={14} /> Storage
-          </div>
-          <div className="text-lg font-bold text-white">Local DB OK</div>
-        </div>
-      </div>
-
-      {/* Кнопки навигации */}
-      <div className="grid gap-4 md:grid-cols-2">
-        {/* КНОПКА ЗАПУСКА ОПРОСА - ведет на вашу логику */}
+      {/* Основная сетка */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        {/* Карточка опроса */}
         <Link href="/survey" className="group">
-          <div className="glass-card p-8 rounded-[2rem] border-l-4 border-l-blue-500 hover:bg-white/5 transition-all relative overflow-hidden">
-            <div className="absolute top-4 right-4 bg-blue-500/20 p-3 rounded-full text-blue-400">
-              <ClipboardList size={24} />
-            </div>
-            <h3 className="text-2xl font-bold text-white mb-2">Начать опрос</h3>
-            <p className="text-slate-400 text-sm mb-4">Запуск стандартной анкеты Сургутского района.</p>
-            <div className="flex items-center text-blue-400 font-bold text-sm">
-              ПЕРЕЙТИ <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
+          <div className="glass-panel h-full p-8 rounded-[2rem] relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:bg-blue-500/20 transition-all" />
+            
+            <div className="relative z-10">
+              <div className="w-14 h-14 bg-blue-500/20 text-blue-400 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <ClipboardList size={32} />
+              </div>
+              
+              <h2 className="text-3xl font-bold mb-2 text-white">Начать опрос</h2>
+              <p className="text-slate-400 mb-8">
+                Запуск стандартной анкеты (Сургутский район). Поддержка оффлайн режима и GPS-трекинга.
+              </p>
+              
+              <div className="flex items-center gap-2 text-blue-400 font-bold group-hover:gap-4 transition-all">
+                ЗАПУСТИТЬ ТЕРМИНАЛ <ArrowRight size={20} />
+              </div>
             </div>
           </div>
         </Link>
 
-        {/* КНОПКА КОНСТРУКТОРА */}
+        {/* Карточка конструктора */}
         <Link href="/admin/builder" className="group">
-          <div className="glass-card p-8 rounded-[2rem] border-l-4 border-l-purple-500 hover:bg-white/5 transition-all relative overflow-hidden">
-            <div className="absolute top-4 right-4 bg-purple-500/20 p-3 rounded-full text-purple-400">
-              <Settings size={24} />
-            </div>
-            <h3 className="text-2xl font-bold text-white mb-2">Конструктор</h3>
-            <p className="text-slate-400 text-sm mb-4">Создание новых динамических форм.</p>
-            <div className="flex items-center text-purple-400 font-bold text-sm">
-              НАСТРОИТЬ <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
+          <div className="glass-panel h-full p-8 rounded-[2rem] relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:bg-purple-500/20 transition-all" />
+            
+            <div className="relative z-10">
+              <div className="w-14 h-14 bg-purple-500/20 text-purple-400 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <Settings size={32} />
+              </div>
+              
+              <h2 className="text-3xl font-bold mb-2 text-white">Конструктор форм</h2>
+              <p className="text-slate-400 mb-8">
+                Создание динамических опросников, редактирование логики и управление базой данных.
+              </p>
+              
+              <div className="flex items-center gap-2 text-purple-400 font-bold group-hover:gap-4 transition-all">
+                ОТКРЫТЬ ПАНЕЛЬ <ArrowRight size={20} />
+              </div>
             </div>
           </div>
         </Link>
+      </div>
+
+      {/* Статистика (подвал) */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <StatCard label="Статус сети" value="Online" icon={Activity} color="text-emerald-400" />
+        <StatCard label="База данных" value="Connected" icon={Database} color="text-blue-400" />
+        <div className="col-span-2 glass-panel p-4 rounded-2xl flex items-center justify-center text-slate-500 text-sm font-mono uppercase">
+          ID сессии: VTX-{Math.floor(Math.random() * 9000) + 1000}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function StatCard({ label, value, icon: Icon, color }) {
+  return (
+    <div className="glass-panel p-4 rounded-2xl flex items-center gap-4">
+      <div className={`p-2 rounded-lg bg-white/5 ${color}`}>
+        <Icon size={20} />
+      </div>
+      <div>
+        <div className="text-xs text-slate-500 font-bold uppercase">{label}</div>
+        <div className="text-white font-bold">{value}</div>
       </div>
     </div>
   );
