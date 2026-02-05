@@ -4,47 +4,46 @@
 
 :root {
   --foreground-rgb: 255, 255, 255;
-  --background-start-rgb: 2, 6, 23;
-  --background-end-rgb: 15, 23, 42;
 }
 
-@layer base {
-  body {
-    background: #020617;
-    color: #f1f5f9;
-  }
+body {
+  color: rgb(var(--foreground-rgb));
+  background: #050505;
+  font-feature-settings: "ss01", "ss02", "cv01", "cv02";
+  -webkit-font-smoothing: antialiased;
 }
 
 @layer components {
-  /* Эффект матового стекла */
-  .glass-card {
-    @apply bg-slate-900/40 backdrop-blur-xl border border-white/10 shadow-xl transition-all duration-300;
+  /* СТЕКЛЯННАЯ КАРТОЧКА */
+  .glass-panel {
+    @apply bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl transition-all duration-300;
   }
   
-  .glass-card:hover {
-    @apply border-white/20 bg-slate-800/50;
+  .glass-panel:hover {
+    @apply bg-white/10 border-white/20 shadow-blue-900/20;
   }
 
-  /* Красивая кнопка */
-  .premium-button {
-    @apply relative overflow-hidden bg-blue-600 text-white font-bold rounded-2xl transition-all duration-300
-           flex items-center justify-center gap-2 active:scale-95 hover:bg-blue-500 shadow-lg shadow-blue-900/40;
+  /* КНОПКА 2026 */
+  .btn-primary {
+    @apply relative inline-flex items-center justify-center gap-2 px-8 py-4 
+           bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl 
+           font-bold text-white tracking-wide shadow-lg shadow-blue-900/40 
+           transition-all duration-300 hover:scale-[1.02] active:scale-95 hover:shadow-blue-500/40;
   }
 
-  /* Анимация появления */
-  .animate-enter {
-    animation: enterKeyframe 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    opacity: 0;
-    transform: translateY(10px);
-  }
-
-  @keyframes enterKeyframe {
-    to { opacity: 1; transform: translateY(0); }
+  /* ПОЛЕ ВВОДА */
+  .input-modern {
+    @apply w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 
+           text-white placeholder-slate-500 outline-none transition-all 
+           focus:border-blue-500 focus:bg-white/10 focus:ring-1 focus:ring-blue-500;
   }
 }
 
-@layer utilities {
-  .animate-pulse-slow {
-    animation: pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  }
+/* Глобальный фон-градиент */
+.bg-mesh {
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(59, 130, 246, 0.15) 0px, transparent 50%);
+  background-attachment: fixed;
 }
