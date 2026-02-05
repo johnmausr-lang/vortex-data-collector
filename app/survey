@@ -1,0 +1,144 @@
+"use client";
+import { useState, useEffect } from "react";
+// Убедитесь, что путь к json правильный, или используйте require
+import schema from "@/survey_schema.json"; 
+import { offlineStorage } from "@/lib/offline-storage";
+import { ChevronLeft, Check, Cloud, WifiOff, Loader2 } from "lucide-react";
+import Link from "next/link";
+
+export default function SurveyPage() {
+  const [step, setStep] = useState(-1);
+  const [formData, setFormData] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [isOnline, setIsOnline] = useState(true);
+
+  useEffect(() => {
+    setIsOnline(navigator.onLine);
+    const handleStatus = () => setIsOnline(navigator.onLine);
+    window.addEventListener('online', handleStatus);
+    window.addEventListener('offline', handleStatus);
+    return () => {
+      window.removeEventListener('online', handleStatus);
+      window.removeEventListener('offline', handleStatus);
+    };
+  }, []);
+
+  const currentQuestion = schema[step];
+  // Защита от деления на ноль и выхода за пределы
+  const progress = step >= 0 ? ((step + 1) / schema.length) * 100 : 0;
+
+  const handleUpdate = (vortexCode, value) => {
+    setFormData(prev => ({ ...prev, [vortexCode]: value }));
+    // Авто-переход для радио-кнопок
+    if (currentQuestion.type === "radio" && step < schema.length - 1) {
+      setTimeout(() => setStep(s => s + 1), 250);
+    }
+  };
+
+  const submitSurvey = async () => {
+    setIsSubmitting(true);
+    // Имитация задержки для красоты
+    await new Promise(r => setTimeout(r, 800));
+    
+    // Ваша логика сохранения
+    offlineStorage.saveSurvey(formData);
+    
+    // Если есть сеть, можно попробовать отправить (пока просто сохраняем)
+    setIsSuccess(true);
+    setIsSubmitting(false);
+  };
+
+  // ЭКРАН ПРИВЕТСТВИЯ
+  if (step === -1) return (
+    <div className="min-h-[70vh] flex flex-col items-center justify-center text-center animate-enter">
+      <div className="w-24 h-24 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-[2rem] flex items-center justify-center mb-6 shadow-2xl shadow-blue-900/40">
+        <Cloud className="text-white" size={40} />
+      </div>
+      <h1 className="text-4xl font-black text-white mb-2">Начать опрос</h1>
+      <p className="text-slate-400 mb-8 max-w-xs mx-auto">Анкета: Социально-политическая ситуация (Сургутский район)</p>
+      
+      <button 
+        onClick={() => setStep(0)} 
+        className="premium-button w-full max-w-xs py-5 text-lg"
+      >
+        ЗАПУСТИТЬ
+      </button>
+      
+      <Link href="/" className="mt-6 text-slate-500 text-sm font-bold hover:text-white transition-colors">
+        ВЕРНУТЬСЯ В МЕНЮ
+      </Link>
+    </div>
+  );
+
+  // ЭКРАН УСПЕХА
+  if (isSuccess) return (
+    <div className="min-h-[70vh] flex flex-col items-center justify-center text-center animate-enter">
+      <div className="w-32 h-32 bg-emerald-500/20 rounded-full flex items-center justify-center mb-6 shadow-[0_0_50px_rgba(16,185,129,0.2)]">
+        <Check size={64} className="text-emerald-500" strokeWidth={3} />
+      </div>
+      <h2 className="text-4xl font-black text-white mb-4">Анкета сохранена!</h2>
+      <p className="text-slate-400 mb-8">Данные записаны в локальное хранилище.</p>
+      
+      <div className="flex flex-col gap-3 w-full max-w-xs mx-auto">
+        <button onClick={() => window.location.reload()} className="premium-button bg-white text-slate-900 hover:bg-slate-200">
+          Следующая анкета
+        </button>
+        <Link href="/" className="p-4 text-slate-500 font-bold hover:text-white transition-colors">
+          Выйти в меню
+        </Link>
+      </div>
+    </div>
+  );
+
+  // ЭКРАН ОПРОСА
+  return (
+    <div className="max-w-xl mx-auto py-6">
+      {/* Прогресс бар */}
+      <div className="mb-8 flex items-center gap-4">
+        <button onClick={() => setStep(s => s - 1)} disabled={step === 0} className="p-2 bg-white/5 rounded-full hover:bg-white/10 disabled:opacity-30 text-white">
+          <ChevronLeft size={24} />
+        </button>
+        <div className="h-2 bg-slate-800 rounded-full flex-grow overflow-hidden relative">
+          <div className="absolute top-0 left-0 h-full bg-blue-500 transition-all duration-500 ease-out" style={{ width: `${progress}%` }} />
+        </div>
+        <span className="text-xs font-bold text-slate-500 w-10 text-right">{Math.round(progress)}%</span>
+      </div>
+
+      <div className="glass-card rounded-[2.5rem] p-8 relative min-h-[400px] flex flex-col">
+        <h2 className="text-2xl font-bold text-white mb-8 leading-snug">
+          {currentQuestion.label}
+        </h2>
+
+        <div className="space-y-3 flex-grow">
+          {currentQuestion.type === "radio" && currentQuestion.options.map(opt => (
+            <button
+              key={opt.code}
+              onClick={() => handleUpdate(currentQuestion.vortex_code, opt.code)}
+              className={`w-full text-left p-5 rounded-2xl border transition-all flex justify-between items-center group ${
+                formData[currentQuestion.vortex_code] === opt.code 
+                ? "bg-blue-600 border-blue-500 text-white shadow-lg shadow-blue-900/30" 
+                : "bg-slate-900/50 border-white/5 text-slate-300 hover:bg-white/5 hover:border-white/20"
+              }`}
+            >
+              <span className="font-medium text-lg">{opt.text}</span>
+              {formData[currentQuestion.vortex_code] === opt.code && <div className="w-2 h-2 bg-white rounded-full" />}
+            </button>
+          ))}
+          
+          {/* Добавьте сюда обработку для select, matrix и textarea, если они есть в JSON */}
+        </div>
+
+        <div className="mt-8 pt-6 border-t border-white/5">
+           <button 
+            onClick={step === schema.length - 1 ? submitSurvey : () => setStep(s => s + 1)}
+            disabled={currentQuestion.required && !formData[currentQuestion.vortex_code]}
+            className="premium-button w-full py-4 text-lg"
+          >
+            {isSubmitting ? <Loader2 className="animate-spin" /> : step === schema.length - 1 ? "Завершить опрос" : "Далее"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
