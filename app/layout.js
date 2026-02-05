@@ -1,52 +1,43 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
-import { ShieldCheck, UserCircle2 } from "lucide-react";
+import { ShieldCheck } from "lucide-react";
 
-const inter = Inter({ 
-  subsets: ["latin", "cyrillic"],
-  variable: '--font-inter',
-});
-
-// ПРАВИЛЬНЫЙ СПОСОБ ДЛЯ NEXT.JS 14
-export const viewport = {
-  width: "device-width",
-  initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
-  themeColor: "#020617",
-};
+const inter = Inter({ subsets: ["latin", "cyrillic"] });
 
 export const metadata = {
-  title: "Vortex Collector 2025 | Сургутский район",
-  description: "Enterprise-система сбора социологических данных",
+  title: "Vortex Data Collector",
+  description: "Система сбора социологических данных",
+  manifest: "/manifest.json",
+  themeColor: "#0f172a",
+  viewport: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="ru" className="dark">
-      <body className={`${inter.variable} font-sans antialiased text-slate-200 min-h-screen flex flex-col`}>
+      <body className={`${inter.className} min-h-screen bg-[#020617] text-slate-100 antialiased selection:bg-blue-500/30`}>
+        {/* Глобальный анимированный фон для всего приложения */}
         <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-600/10 blur-[120px]" />
-          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-indigo-600/10 blur-[120px]" />
+          <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-blue-600/20 blur-[120px] animate-pulse-slow" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-indigo-600/20 blur-[120px] animate-pulse-slow" style={{ animationDelay: '1s' }} />
         </div>
 
-        <header className="sticky top-0 z-50 w-full px-6 py-4">
-          <div className="max-w-7xl mx-auto glass-card rounded-3xl px-6 py-3 flex justify-between items-center border-white/10 shadow-2xl">
+        {/* Шапка, общая для всех страниц */}
+        <header className="fixed top-0 left-0 right-0 z-50 px-4 py-4">
+          <div className="max-w-7xl mx-auto glass-card rounded-2xl px-5 py-3 flex justify-between items-center shadow-2xl backdrop-blur-xl">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-600/40">
+              <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center shadow-lg shadow-blue-500/30">
                 <ShieldCheck className="text-white" size={18} strokeWidth={2.5} />
               </div>
               <span className="font-black tracking-tighter text-lg uppercase italic">
-                Vortex<span className="text-blue-500">2025</span>
+                Vortex<span className="text-blue-500">.App</span>
               </span>
             </div>
-            <div className="flex items-center gap-4">
-              <UserCircle2 className="text-slate-400" size={24} strokeWidth={1.5} />
-            </div>
+            <div className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_10px_#22c55e] animate-pulse" />
           </div>
         </header>
 
-        <main className="flex-grow flex flex-col relative z-10">
+        <main className="pt-24 pb-10 px-4 min-h-screen flex flex-col relative z-10 max-w-7xl mx-auto w-full">
           {children}
         </main>
       </body>
